@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Pokedex.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +25,17 @@ namespace Pokedex
         public PokemonWindow(string pokemonUrl)
         {
             InitializeComponent();
-            url.Text = pokemonUrl;
+            
+
+            Pokemon pokemon = Task.Run(() => GetPokemon(pokemonUrl)).Result;
+            url.Text = pokemon.name;
+
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(pokemon.sprites.other.official_artwork.front_default);
+            bitmap.EndInit();
+            img.Source = bitmap;
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -31,5 +44,23 @@ namespace Pokedex
             mainWindow.Show();
             this.Close();
         }
+        public async Task<Pokemon> GetPokemon(string Url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.GetAsync(Url))
+                {
+                    using (HttpContent content = response.Content)
+                    {
+                        var data = await content.ReadAsStringAsync();
+                        data = data.Replace("-", "_");
+                        Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(data);
+                        pokemon.sprites.other.official_artwork.front_default = pokemon.sprites.other.official_artwork.front_default.Replace("official_artwork", "official-artwork");
+                        return pokemon;
+                    }
+                }
+            }
+        }
     }
+
 }

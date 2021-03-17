@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Pokedex"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="450">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
@@ -20,13 +20,15 @@
                 <TextBox Grid.Column="0" x:Name="textBox"></TextBox>
                 <Button Grid.Column="1" Name="searchBtn" Content="Szukaj" Click="searchBtn_Click"></Button>
             </Grid>
-            <ItemsControl Grid.Row="1" x:Name="ic">
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl  x:Name="ic">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Width="300" Margin="0,10,0,0" Content="{Binding ButtonContent}" Tag="{Binding Url}" Click="Button_Click"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
+   
 </Window>
