@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Pokedex.Classes;
+using System.Collections.ObjectModel;
 
 namespace Pokedex
 {
@@ -23,23 +24,27 @@ namespace Pokedex
     /// </summary>
     public partial class MainWindow : Window
     {
+        PokemonList pokemonList;
+        ObservableCollection<PokemonButton> buttons;
         public MainWindow()
         {
             InitializeComponent();
             string baseUrl = "https://pokeapi.co/api/v2/pokemon?limit=100";
+            
 
             try
             {
-                PokemonList pokemonList = Task.Run(() => GetPokemonList(baseUrl)).Result;
-                List<Button> buttons = new List<Button>();
+                pokemonList = Task.Run(() => GetPokemonList(baseUrl)).Result;
+                buttons = new ObservableCollection<PokemonButton>();
                 foreach (CPokemonListed pokemon in pokemonList.results)
                 {
-                    buttons.Add(new Button { Content = pokemon.name });
+                    buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url});
                 }
 
                 ic.ItemsSource = buttons;
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
@@ -65,5 +70,44 @@ namespace Pokedex
                 }
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            PokemonWindow pokemonWindow = new PokemonWindow((string)((Button)sender).Tag);
+            pokemonWindow.Show();
+            this.Close();
+        }
+
+        private void searchBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if(textBox.Text != "")
+            {
+                buttons.Clear();
+                foreach(CPokemonListed pokemon in pokemonList.results)
+                {
+                    if(pokemon.name.Contains(textBox.Text))
+                    {
+                        buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url });
+                    }
+
+                }          
+            }
+            else if (buttons.Count < 100)
+            {
+                buttons.Clear();
+                foreach (CPokemonListed pokemon in pokemonList.results)
+                {
+                    buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url });
+                }
+
+            }
+        }
+    }
+
+    public class PokemonButton
+    {
+        public string ButtonContent { get; set; }
+        public string Url { get; set; }
     }
 }
