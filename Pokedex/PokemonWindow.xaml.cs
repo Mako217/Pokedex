@@ -14,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Pokedex.Classes;
+using System.Collections.ObjectModel;
 
 namespace Pokedex
 {
@@ -28,14 +30,27 @@ namespace Pokedex
             
 
             Pokemon pokemon = Task.Run(() => GetPokemon(pokemonUrl)).Result;
-            url.Text = pokemon.name;
+            url.Text = char.ToUpper(pokemon.name[0]) + pokemon.name.Substring(1);
 
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(pokemon.sprites.other.official_artwork.front_default);
             bitmap.EndInit();
             img.Source = bitmap;
-            
+
+            ObservableCollection<TextBoxTemplate> abilities = new ObservableCollection<TextBoxTemplate>();
+            foreach(Pokemon.AbilityListed abilityListed in pokemon.abilities)
+            {
+                abilities.Add(new TextBoxTemplate { text = char.ToUpper(abilityListed.ability.name[0]) + (abilityListed.ability.name.Substring(1)).Replace("_", " ") });
+            }
+            icAbilities.ItemsSource = abilities;
+
+            ObservableCollection<TextBoxTemplate> moves = new ObservableCollection<TextBoxTemplate>();
+            foreach(Pokemon.MoveListed moveListed in pokemon.moves)
+            {
+                moves.Add(new TextBoxTemplate { text = char.ToUpper(moveListed.move.name[0]) + (moveListed.move.name.Substring(1)).Replace("_", " ") });
+            }
+            icMoves.ItemsSource = moves;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -60,6 +75,10 @@ namespace Pokedex
                     }
                 }
             }
+        }
+        public class TextBoxTemplate
+        {
+            public string text { get; set; }
         }
     }
 

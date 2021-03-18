@@ -7,9 +7,36 @@
         mc:Ignorable="d"
         Title="PokemonWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Wróć" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="352,350,0,0" Click="Button_Click"/>
-        <TextBlock HorizontalAlignment="Left" Margin="-10,31,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="42" Width="792" Name="url" TextAlignment="Center" FontSize="32"/>
-        <Image x:Name="img" HorizontalAlignment="Center" Height="250"  Width="250" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+
+            <TextBlock HorizontalAlignment="Center" Margin="0,30,0,0" TextWrapping="Wrap" Text="Pokemon Name" VerticalAlignment="Top" Name="url" TextAlignment="Center" FontSize="32"/>
+            <Image x:Name="img" HorizontalAlignment="Center" Height="250" Width="250" Margin="0, 10, 0, 0"/>
+            <Button Margin="0, 20" Content="Wróć" HorizontalAlignment="Center" Height="50" Width="150" Click="Button_Click"/>
+        </StackPanel>
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Grid.Column="1">
+                <TextBlock HorizontalAlignment="Left" Text="Abilities" Margin="0,30,0,0" FontSize="20" FontWeight="Bold"/>
+                <ItemsControl x:Name="icAbilities" Margin="0,20,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="14" Text="{Binding text}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock HorizontalAlignment="Left" Text="Moves" Margin="0,30,0,0" FontSize="20" FontWeight="Bold"/>
+                <ItemsControl x:Name="icMoves" Margin="0,20,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock FontSize="14" Text="{Binding text}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
 
     </Grid>
 </Window>

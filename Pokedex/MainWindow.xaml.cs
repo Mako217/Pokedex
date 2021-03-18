@@ -36,9 +36,9 @@ namespace Pokedex
             {
                 pokemonList = Task.Run(() => GetPokemonList(baseUrl)).Result;
                 buttons = new ObservableCollection<PokemonButton>();
-                foreach (CPokemonListed pokemon in pokemonList.results)
+                foreach (NameAndUrl pokemon in pokemonList.results)
                 {
-                    buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url});
+                    buttons.Add(new PokemonButton { ButtonContent = char.ToUpper(pokemon.name[0]) + pokemon.name.Substring(1), Url = pokemon.url});
                 }
 
                 ic.ItemsSource = buttons;
@@ -84,11 +84,11 @@ namespace Pokedex
             if(textBox.Text != "")
             {
                 buttons.Clear();
-                foreach(CPokemonListed pokemon in pokemonList.results)
+                foreach(NameAndUrl pokemon in pokemonList.results)
                 {
-                    if(pokemon.name.Contains(textBox.Text))
+                    if(pokemon.name.Contains(textBox.Text.ToLower()))
                     {
-                        buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url });
+                        buttons.Add(new PokemonButton { ButtonContent = char.ToUpper(pokemon.name[0]) + pokemon.name.Substring(1), Url = pokemon.url });
                     }
 
                 }          
@@ -96,9 +96,9 @@ namespace Pokedex
             else if (buttons.Count < 100)
             {
                 buttons.Clear();
-                foreach (CPokemonListed pokemon in pokemonList.results)
+                foreach (NameAndUrl pokemon in pokemonList.results)
                 {
-                    buttons.Add(new PokemonButton { ButtonContent = pokemon.name, Url = pokemon.url });
+                    buttons.Add(new PokemonButton { ButtonContent = char.ToUpper(pokemon.name[0]) + pokemon.name.Substring(1), Url = pokemon.url });
                 }
 
             }

@@ -8,16 +8,16 @@ namespace Pokedex.Classes
 {
     public class PokemonList
     {
-        public List<CPokemonListed> results { get; set; }
+        public List<NameAndUrl> results { get; set; }
         public int count { get; set; }
         public string next { get; set; }
     }
 
-    public class CPokemonListed
+
+    public class NameAndUrl
     {
         public string name { get; set; }
         public string url { get; set; }
     }
-
 
 }

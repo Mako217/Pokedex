@@ -11,20 +11,24 @@ namespace Pokedex.Classes
     public class Pokemon
     {
         public string name { get; set; }
-        public List<Abilities> abilities { get; set; }
+        public List<AbilityListed> abilities { get; set; }
+        public List<MoveListed> moves { get; set; }
         public Sprites sprites { get; set; }
 
-        public class Abilities
+        public class AbilityListed
         {
-            public Ability ability { get; set; }
+            public NameAndUrl ability { get; set; }
             public bool is_hidden { get; set; }
             public int slot { get; set; }
 
-            public class Ability
+            public class Ability:NameAndUrl
             {
-                public string name { get; set; }
-                public string url { get; set; }
             }
+        }
+
+        public class MoveListed
+        {
+            public NameAndUrl move { get; set; }
         }
 
         public class Sprites
